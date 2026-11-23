@@ -1,0 +1,2392 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Arvind & Nikhil — The Hard Launch | Dec 20, 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================================
+       THEME TOKENS — IVORY EDITORIAL (LIGHT) & MIDNIGHT (DARK)
+    ========================================================= */
+    :root {
+      --bg: #FBF7F0;
+      --bg-alt: #F3EBDD;
+      --surface: #FFFFFF;
+      --surface-glass: rgba(255, 255, 255, 0.82);
+      --text: #1B1613;
+      --text-muted: #5F544B;
+      --accent: #C84B31;       /* Sindoor Terracotta */
+      --accent-2: #DF9618;     /* Marigold Gold */
+      --accent-soft: rgba(200, 75, 49, 0.10);
+      --border: rgba(27, 22, 19, 0.12);
+      --shadow: 0 20px 50px rgba(27, 22, 19, 0.08);
+      --shadow-sm: 0 8px 24px rgba(27, 22, 19, 0.06);
+      --ticket-bg: #1B1613;
+      --ticket-text: #FBF7F0;
+      --badge-bg: #EFE5D4;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0D0C12;
+      --bg-alt: #16141F;
+      --surface: #1B1826;
+      --surface-glass: rgba(27, 24, 38, 0.82);
+      --text: #F7F3EC;
+      --text-muted: #B6AEBF;
+      --accent: #FF6B7B;       /* Electric Rose */
+      --accent-2: #F4C97A;     /* Champagne Gold */
+      --accent-soft: rgba(255, 107, 123, 0.14);
+      --border: rgba(247, 243, 236, 0.12);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      --shadow-sm: 0 10px 28px rgba(0, 0, 0, 0.30);
+      --ticket-bg: #241F33;
+      --ticket-text: #F7F3EC;
+      --badge-bg: #272238;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background 0.45s ease, color 0.45s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.locked {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Subtle Ambient Gradient Mesh */
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .ambient-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(95px);
+      opacity: 0.24;
+      transition: background 0.5s ease;
+    }
+    .blob-1 {
+      width: 460px;
+      height: 460px;
+      top: -120px;
+      right: -100px;
+      background: var(--accent-2);
+    }
+    .blob-2 {
+      width: 420px;
+      height: 420px;
+      bottom: -140px;
+      left: -120px;
+      background: var(--accent);
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* =========================================================
+       ENTRY CURTAIN (WAX-SEAL VIP TICKET SCREEN)
+    ========================================================= */
+    #entry-curtain {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: radial-gradient(circle at top right, #2D1B18 0%, #141013 55%, #0B090C 100%);
+      color: #FBF7F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.75s ease;
+    }
+    #entry-curtain.opened {
+      transform: translateY(-105%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .curtain-ticket {
+      width: 100%;
+      max-width: 460px;
+      background: linear-gradient(155deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid rgba(244, 201, 122, 0.35);
+      border-radius: 30px;
+      padding: 36px 28px;
+      text-align: center;
+      position: relative;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    }
+    .curtain-ticket::before,
+    .curtain-ticket::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #141013;
+      border: 1px solid rgba(244, 201, 122, 0.35);
+      transform: translateY(-50%);
+    }
+    .curtain-ticket::before { left: -13px; }
+    .curtain-ticket::after { right: -13px; }
+
+    .curtain-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #F4C97A;
+      margin-bottom: 16px;
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(244, 201, 122, 0.12);
+    }
+
+    .curtain-names {
+      font-family: var(--font-serif);
+      font-size: clamp(2.8rem, 9vw, 4rem);
+      line-height: 1.04;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+    .curtain-names span {
+      font-style: italic;
+      color: #F4C97A;
+    }
+
+    .curtain-sub {
+      color: rgba(251, 247, 240, 0.78);
+      font-size: 0.96rem;
+      margin-bottom: 28px;
+    }
+
+    .curtain-divider {
+      border: none;
+      border-top: 1px dashed rgba(244, 201, 122, 0.32);
+      margin: 22px 0 28px;
+    }
+
+    .wax-seal-btn {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 224, 166, 0.7);
+      background: radial-gradient(circle at 30% 30%, #E05A3F, #A82E1C 72%, #741C10 100%);
+      color: #FFF7EB;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(200, 75, 49, 0.5), inset 0 2px 8px rgba(255,255,255,0.3);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      animation: sealPulse 2.4s infinite ease-in-out;
+    }
+    .wax-seal-btn:hover {
+      transform: scale(1.07);
+      box-shadow: 0 16px 38px rgba(224, 90, 63, 0.65);
+    }
+    .wax-seal-btn:active {
+      transform: scale(0.96);
+    }
+    .wax-monogram {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+    .wax-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-top: 4px;
+      opacity: 0.9;
+    }
+    .curtain-hint {
+      margin-top: 18px;
+      font-size: 0.82rem;
+      color: rgba(251, 247, 240, 0.62);
+    }
+
+    @keyframes sealPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(244, 201, 122, 0.42), 0 12px 30px rgba(200, 75, 49, 0.5); }
+      50% { box-shadow: 0 0 0 16px rgba(244, 201, 122, 0), 0 12px 30px rgba(200, 75, 49, 0.5); }
+    }
+
+    /* =========================================================
+       TOP FLOATING NAVBAR
+    ========================================================= */
+    .topbar {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(94%, 1060px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 16px;
+      background: var(--surface-glass);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 0.96rem;
+      letter-spacing: -0.01em;
+    }
+    .brand-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: var(--radius-pill);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text);
+      background: var(--accent-soft);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 8px 13px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+    .pill-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+    .pill-btn.active-audio {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* =========================================================
+       SLIDE DECK CONTAINER & DOTS
+    ========================================================= */
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide {
+      min-height: 100vh;
+      width: 100%;
+      padding: 104px 20px 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .slide-inner {
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    /* Side Slide Progress Dots (Desktop) */
+    .slide-dots {
+      position: fixed;
+      right: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .slide-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      border: 2px solid var(--text-muted);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0;
+    }
+    .slide-dot.active {
+      height: 30px;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Bottom Floating Slide Controls (Easy Next/Prev) */
+    .slide-nav-controls {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 950;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-sm);
+    }
+    .slide-arrow {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+    .slide-arrow:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 115px;
+      text-align: center;
+    }
+
+    /* =========================================================
+       COMMON TYPOGRAPHY & CARDS
+    ========================================================= */
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-soft);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 5.5vw, 4.1rem);
+      line-height: 1.05;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      margin-bottom: 12px;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .section-lead {
+      color: var(--text-muted);
+      font-size: clamp(0.98rem, 1.8vw, 1.12rem);
+      max-width: 620px;
+      margin-bottom: 30px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border: none;
+      padding: 14px 26px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 0.94rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(200, 75, 49, 0.28);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(200, 75, 49, 0.36);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 13px 22px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* =========================================================
+       SLIDE 1: HERO — THE HARD LAUNCH
+    ========================================================= */
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 34px;
+      padding: clamp(28px, 5vw, 56px);
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top center, var(--accent-soft), transparent 58%);
+      pointer-events: none;
+    }
+
+    .hero-meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .meta-chip {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--badge-bg);
+      color: var(--text);
+    }
+
+    .hero-names {
+      font-family: var(--font-serif);
+      font-size: clamp(3.4rem, 9.5vw, 6.4rem);
+      line-height: 0.98;
+      font-weight: 400;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero-names .amp {
+      font-style: italic;
+      color: var(--accent);
+      display: inline-block;
+      margin: 0 6px;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      color: var(--text-muted);
+      max-width: 580px;
+      margin: 0 auto 30px;
+    }
+
+    /* Live Countdown Grid */
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(70px, 128px));
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .cd-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px 10px;
+    }
+    .cd-num {
+      font-family: var(--font-mono);
+      font-size: clamp(1.6rem, 4vw, 2.35rem);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .cd-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* =========================================================
+       SLIDE 2: THE LORE & LIVE EMOJI HYPE WIDGET
+    ========================================================= */
+    .lore-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .lore-timeline {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .lore-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .lore-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+    .lore-year {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-soft);
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 10px;
+    }
+    .lore-card h3 {
+      font-size: 1.08rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .lore-card p {
+      font-size: 0.91rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .hype-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hype-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: #15803D;
+      background: rgba(22, 163, 74, 0.14);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+    [data-theme="dark"] .hype-badge {
+      color: #4ADE80;
+      background: rgba(74, 222, 128, 0.14);
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: blink 1.4s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    .hype-counter-val {
+      font-family: var(--font-mono);
+      font-size: 2.5rem;
+      font-weight: 600;
+      line-height: 1.1;
+      margin: 6px 0 4px;
+    }
+    .hype-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .emoji-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 8px;
+      font-size: 1.45rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.15s ease, border-color 0.2s ease;
+    }
+    .emoji-btn span {
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .emoji-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: var(--accent);
+    }
+    .emoji-btn:active {
+      transform: scale(0.93);
+    }
+
+    .hype-vibe-msg {
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: var(--badge-bg);
+      color: var(--text);
+      text-align: center;
+    }
+
+    .floating-emoji {
+      position: fixed;
+      font-size: 2rem;
+      pointer-events: none;
+      z-index: 8000;
+      animation: floatUp 1.8s ease-out forwards;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.7) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-240px) scale(1.45) rotate(18deg); opacity: 0; }
+    }
+
+    /* =========================================================
+       SLIDE 3: 4 WEDDING FUNCTIONS DECK + .ICS CALENDAR
+    ========================================================= */
+    .events-header-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .event-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .event-tab {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .event-tab.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 8px 20px rgba(200, 75, 49, 0.25);
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .event-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .event-card.highlighted {
+      border-color: var(--accent);
+      box-shadow: 0 16px 38px rgba(200, 75, 49, 0.16);
+      transform: translateY(-3px);
+    }
+
+    .event-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .event-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .event-name {
+      font-family: var(--font-serif);
+      font-size: 1.95rem;
+      line-height: 1.1;
+      font-weight: 400;
+    }
+    .event-emoji {
+      font-size: 1.8rem;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: var(--bg);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .event-tagline {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .event-details {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--bg);
+      font-size: 0.87rem;
+    }
+    .event-detail-row {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+    .event-detail-row strong {
+      min-width: 68px;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    .event-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .dress-pill {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .ics-btn {
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 9px 15px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .ics-btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    /* =========================================================
+       SLIDE 4: FIT CHECK PALETTE & VENUE HUB
+    ========================================================= */
+    .fit-venue-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .panel-card h3 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 6px;
+    }
+    .panel-card .sub {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 20px;
+    }
+
+    .swatches-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .swatch {
+      border-radius: 18px;
+      padding: 12px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      background: var(--bg);
+      text-align: left;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .swatch:hover,
+    .swatch.active {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .swatch-color {
+      width: 100%;
+      height: 46px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .swatch-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text);
+      display: block;
+    }
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .fit-tip-box {
+      background: var(--bg);
+      border-radius: 16px;
+      padding: 14px 16px;
+      border: 1px dashed var(--border);
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .venue-address-box {
+      background: var(--bg);
+      border-radius: 18px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .venue-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .venue-addr {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .venue-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .logistics-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .log-item {
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 0.83rem;
+    }
+    .log-item strong {
+      display: block;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    /* =========================================================
+       SLIDE 5: RSVP + PERSONALIZED VIP BOARDING PASS
+    ========================================================= */
+    .rsvp-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .form-row {
+      margin-bottom: 16px;
+    }
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    label.field-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    input[type="text"]:focus,
+    select:focus {
+      border-color: var(--accent);
+    }
+
+    .check-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .check-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 8px 13px;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .check-pill input {
+      accent-color: var(--accent);
+    }
+
+    /* VIP Boarding Pass Preview */
+    .vip-pass-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .vip-pass {
+      background: var(--ticket-bg);
+      color: var(--ticket-text);
+      border-radius: 26px;
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(244, 201, 122, 0.35);
+      box-shadow: var(--shadow);
+    }
+    .vip-pass::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(244, 201, 122, 0.28), transparent 70%);
+      pointer-events: none;
+    }
+    .pass-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .pass-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #F4C97A;
+      border: 1px solid rgba(244, 201, 122, 0.4);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .pass-code {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      opacity: 0.8;
+    }
+
+    .pass-route {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .pass-city {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .pass-city small {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      opacity: 0.7;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+    .pass-arrow {
+      flex: 1;
+      text-align: center;
+      font-size: 1.1rem;
+      color: #F4C97A;
+      position: relative;
+    }
+    .pass-arrow::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      top: 50%;
+      border-top: 1px dashed rgba(244, 201, 122, 0.4);
+      z-index: 0;
+    }
+    .pass-arrow span {
+      position: relative;
+      z-index: 1;
+      background: var(--ticket-bg);
+      padding: 0 8px;
+    }
+
+    .pass-divider {
+      border: none;
+      border-top: 1px dashed rgba(255, 255, 255, 0.22);
+      margin: 16px 0;
+    }
+
+    .pass-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .pass-field span {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(251, 247, 240, 0.6);
+      margin-bottom: 2px;
+    }
+    .pass-field strong {
+      font-size: 0.95rem;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .barcode-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .barcode-bars {
+      height: 34px;
+      flex: 1;
+      background: repeating-linear-gradient(
+        90deg,
+        #FBF7F0 0px, #FBF7F0 2px,
+        transparent 2px, transparent 5px,
+        #FBF7F0 5px, #FBF7F0 9px,
+        transparent 9px, transparent 11px,
+        #FBF7F0 11px, #FBF7F0 12px,
+        transparent 12px, transparent 16px
+      );
+      opacity: 0.85;
+      border-radius: 3px;
+    }
+    .pass-status-pill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: rgba(74, 222, 128, 0.18);
+      color: #4ADE80;
+      white-space: nowrap;
+    }
+
+    .pass-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      top: 84px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--text);
+      color: var(--bg);
+      padding: 11px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 0.86rem;
+      font-weight: 600;
+      z-index: 9000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 18px 20px 88px;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+    }
+
+    /* =========================================================
+       RESPONSIVE MOBILE POLISH
+    ========================================================= */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .slide-dots { display: none; }
+      .lore-layout,
+      .events-grid,
+      .fit-venue-grid,
+      .rsvp-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .slide { padding: 88px 14px 86px; }
+      .topbar { padding: 8px 12px; }
+      .pill-btn .btn-text { display: none; }
+      .countdown-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      .cd-box { padding: 12px 6px; border-radius: 14px; }
+      .lore-timeline { grid-template-columns: 1fr; }
+      .swatches-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row-2 { grid-template-columns: 1fr; }
+      .logistics-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="locked">
+  <!-- Ambient Background Blobs -->
+  <div class="ambient-bg">
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Toast -->
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- =========================================================
+       ENTRY CURTAIN: WAX-SEAL VIP INVITE
+  ========================================================= -->
+  <section id="entry-curtain" aria-label="Wedding Invitation Cover">
+    <div class="curtain-ticket">
+      <div class="curtain-kicker">VIP Wedding Pass • Dec 2026</div>
+      <h1 class="curtain-names">Arvind <span>&amp;</span> Nikhil</h1>
+      <p class="curtain-sub">The Hard Launch is officially here.<br>Jaipur • Dec 19–20, 2026</p>
+      <hr class="curtain-divider">
+      <button id="open-invite-btn" class="wax-seal-btn" aria-label="Open Wedding Invitation">
+        <span class="wax-monogram">A♥N</span>
+        <span class="wax-label">Tap Seal</span>
+      </button>
+      <p class="curtain-hint">Tap the wax seal to unlock your invite</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FLOATING TOP NAVIGATION BAR
+  ========================================================= -->
+  <header class="topbar">
+    <a href="#slide-1" class="brand">
+      <span class="brand-dot">A&amp;N</span>
+      <span>The Hard Launch</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Slide Navigation">
+      <a href="#slide-1" class="nav-link active" data-slide="0">Home</a>
+      <a href="#slide-2" class="nav-link" data-slide="1">The Lore</a>
+      <a href="#slide-3" class="nav-link" data-slide="2">Functions</a>
+      <a href="#slide-4" class="nav-link" data-slide="3">Fit Check</a>
+      <a href="#slide-5" class="nav-link" data-slide="4">VIP RSVP</a>
+    </nav>
+
+    <div class="topbar-actions">
+      <button id="music-toggle" class="pill-btn" title="Toggle Chill Ambient Music">
+        <span id="music-icon">🎵</span>
+        <span class="btn-text" id="music-label">Vibe Off</span>
+      </button>
+      <button id="theme-toggle" class="pill-btn" title="Switch Ivory / Midnight Theme">
+        <span id="theme-icon">🌙</span>
+        <span class="btn-text" id="theme-label">Midnight</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Right Side Slide Indicator Dots -->
+  <aside class="slide-dots" aria-label="Slide Progress">
+    <button class="slide-dot active" data-slide="0" title="Slide 1: The Hard Launch"></button>
+    <button class="slide-dot" data-slide="1" title="Slide 2: The Lore"></button>
+    <button class="slide-dot" data-slide="2" title="Slide 3: Functions"></button>
+    <button class="slide-dot" data-slide="3" title="Slide 4: Fit Check & Venue"></button>
+    <button class="slide-dot" data-slide="4" title="Slide 5: RSVP & VIP Pass"></button>
+  </aside>
+
+  <!-- Bottom Floating Slide Controls -->
+  <div class="slide-nav-controls" aria-label="Slide Controls">
+    <button class="slide-arrow" id="prev-slide" aria-label="Previous Slide">←</button>
+    <div class="slide-counter" id="slide-counter">01 / 05 • LAUNCH</div>
+    <button class="slide-arrow" id="next-slide" aria-label="Next Slide">→</button>
+  </div>
+
+  <!-- =========================================================
+       MAIN 5-SLIDE INTERACTIVE EXPERIENCE
+  ========================================================= -->
+  <main>
+    <!-- SLIDE 1: THE HARD LAUNCH -->
+    <section id="slide-1" class="slide" data-title="LAUNCH">
+      <div class="slide-inner">
+        <div class="hero-card">
+          <div class="hero-meta-strip">
+            <span class="meta-chip">✨ Save The Date</span>
+            <span class="meta-chip">📅 Dec 19–20, 2026</span>
+            <span class="meta-chip">📍 Jaipur, Rajasthan</span>
+          </div>
+
+          <h1 class="hero-names">
+            Arvind <span class="amp">&amp;</span> Nikhil
+          </h1>
+
+          <p class="hero-sub">
+            No more soft launches, no more blurry stories. Two families, four iconic functions, zero chill — you're officially invited to celebrate our forever.
+          </p>
+
+          <div class="countdown-grid" aria-label="Wedding Countdown">
+            <div class="cd-box">
+              <div class="cd-num" id="cd-days">00</div>
+              <div class="cd-label">Days</div>
+            </div>
+            <div class="cd-box">
+              <div class="cd-num" id="cd-hours">00</div>
+              <div class="cd-label">Hours</div>
+            </div>
+            <div class="cd-box">
+              <div class="cd-num" id="cd-mins">00</div>
+              <div class="cd-label">Mins</div>
+            </div>
+            <div class="cd-box">
+              <div class="cd-num" id="cd-secs">00</div>
+              <div class="cd-label">Secs</div>
+            </div>
+          </div>
+
+          <div class="hero-cta-row">
+            <a href="#slide-3" class="btn-primary">Explore Functions →</a>
+            <a href="#slide-5" class="btn-secondary">Claim VIP Pass 🎟️</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: THE LORE & LIVE HYPE WIDGET -->
+    <section id="slide-2" class="slide" data-title="THE LORE">
+      <div class="slide-inner">
+        <span class="eyebrow">02 • The Lore</span>
+        <h2 class="section-title">How it started vs. <em>How it's going</em></h2>
+        <p class="section-lead">
+          Short version: one chaotic first meeting, way too many late-night drives, and an instant "yeah, this is my person" moment.
+        </p>
+
+        <div class="lore-layout">
+          <div class="lore-timeline">
+            <article class="lore-card">
+              <span class="lore-year">2022 • The Glitch</span>
+              <h3>Accidental First Meet</h3>
+              <p>Met through mutual friends over cold coffee that neither of them actually liked. Ended up talking till the café turned off the lights.</p>
+            </article>
+            <article class="lore-card">
+              <span class="lore-year">2023 • Plot Twist</span>
+              <h3>Best Friends to Everything</h3>
+              <p>Daily 2 AM calls, matching playlists, and surviving every chaotic plan together. Everyone saw it coming except them.</p>
+            </article>
+            <article class="lore-card">
+              <span class="lore-year">2025 • The Question</span>
+              <h3>Golden Hour "Yes"</h3>
+              <p>Sunset rooftop, fairy lights, nervous speech that lasted 12 seconds, and the easiest yes of their lives.</p>
+            </article>
+            <article class="lore-card">
+              <span class="lore-year">2026 • Main Event</span>
+              <h3>The Hard Launch</h3>
+              <p>Two days in Jaipur with our favorite humans, loud music, epic food, and memories we'll never stop posting about.</p>
+            </article>
+          </div>
+
+          <div class="hype-panel">
+            <div class="hype-badge"><span class="live-dot"></span> LIVE VIBE METER</div>
+            <h3>Drop Your Hype</h3>
+            <div class="hype-counter-val" id="hype-count">1,248</div>
+            <p class="hype-sub">Reactions sent for Arvind &amp; Nikhil — spam your favorite emoji!</p>
+
+            <div class="emoji-grid">
+              <button class="emoji-btn" data-emoji="🔥" data-msg="Vibe check: Absolute fire! 🔥">🔥<span>Fire</span></button>
+              <button class="emoji-btn" data-emoji="🥂" data-msg="Cheers to the iconic duo! 🥂">🥂<span>Cheers</span></button>
+              <button class="emoji-btn" data-emoji="💃" data-msg="Sangeet floor isn't ready! 💃">💃<span>Dance</span></button>
+              <button class="emoji-btn" data-emoji="💍" data-msg="Officially locked in forever! 💍">💍<span>Locked In</span></button>
+              <button class="emoji-btn" data-emoji="✨" data-msg="Main character energy unlocked! ✨">✨<span>Slay</span></button>
+              <button class="emoji-btn" data-emoji="❤️" data-msg="Sending pure love to A &amp; N! ❤️">❤️<span>Love</span></button>
+            </div>
+
+            <div class="hype-vibe-msg" id="hype-msg">Tap an emoji above to send hype! ✨</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: 4 WEDDING FUNCTIONS DECK -->
+    <section id="slide-3" class="slide" data-title="FUNCTIONS">
+      <div class="slide-inner">
+        <div class="events-header-row">
+          <div>
+            <span class="eyebrow">03 • The Lineup</span>
+            <h2 class="section-title">Four events. <em>Zero skips.</em></h2>
+          </div>
+          <button class="btn-secondary" id="download-all-ics">📅 Save All 4 to Calendar (.ics)</button>
+        </div>
+
+        <div class="event-tabs" role="tablist">
+          <button class="event-tab active" data-filter="all">All 4 Events</button>
+          <button class="event-tab" data-filter="day1">Day 1 • Dec 19</button>
+          <button class="event-tab" data-filter="day2">Day 2 • Dec 20</button>
+        </div>
+
+        <div class="events-grid" id="events-grid">
+          <!-- Event 1 -->
+          <article class="event-card highlighted" data-day="day1">
+            <div>
+              <div class="event-top">
+                <div>
+                  <div class="event-num">Event 01 • Day 1</div>
+                  <h3 class="event-name">Haldi &amp; Sun Brunch</h3>
+                </div>
+                <div class="event-emoji">🌼</div>
+              </div>
+              <p class="event-tagline">Marigold showers, iced thandai, dhol beats, and pure golden-hour chaos.</p>
+            </div>
+            <div class="event-details">
+              <div class="event-detail-row"><strong>Date</strong><span>Saturday, 19 Dec 2026</span></div>
+              <div class="event-detail-row"><strong>Time</strong><span>11:00 AM – 02:30 PM</span></div>
+              <div class="event-detail-row"><strong>Spot</strong><span>Courtyard Lawn, Suryagarh Villa</span></div>
+            </div>
+            <div class="event-footer">
+              <span class="dress-pill">💛 Sunshine Yellow &amp; Ivory</span>
+              <button class="ics-btn" data-ics="0">+ Calendar (.ics)</button>
+            </div>
+          </article>
+
+          <!-- Event 2 -->
+          <article class="event-card" data-day="day1">
+            <div>
+              <div class="event-top">
+                <div>
+                  <div class="event-num">Event 02 • Day 1</div>
+                  <h3 class="event-name">Sangeet &amp; Cocktail</h3>
+                </div>
+                <div class="event-emoji">🪩</div>
+              </div>
+              <p class="event-tagline">No-skip Bollywood + Afro-house playlist, dance battles &amp; signature cocktails.</p>
+            </div>
+            <div class="event-details">
+              <div class="event-detail-row"><strong>Date</strong><span>Saturday, 19 Dec 2026</span></div>
+              <div class="event-detail-row"><strong>Time</strong><span>07:30 PM – 11:30 PM</span></div>
+              <div class="event-detail-row"><strong>Spot</strong><span>The Glasshouse Ballroom</span></div>
+            </div>
+            <div class="event-footer">
+              <span class="dress-pill">✨ Indo-Western Glam</span>
+              <button class="ics-btn" data-ics="1">+ Calendar (.ics)</button>
+            </div>
+          </article>
+
+          <!-- Event 3 -->
+          <article class="event-card" data-day="day2">
+            <div>
+              <div class="event-top">
+                <div>
+                  <div class="event-num">Event 03 • Day 2</div>
+                  <h3 class="event-name">The Wedding</h3>
+                </div>
+                <div class="event-emoji">💍</div>
+              </div>
+              <p class="event-tagline">The main chapter — baraat energy, twilight vows, pheras &amp; royal feast.</p>
+            </div>
+            <div class="event-details">
+              <div class="event-detail-row"><strong>Date</strong><span>Sunday, 20 Dec 2026</span></div>
+              <div class="event-detail-row"><strong>Time</strong><span>06:30 PM Onwards</span></div>
+              <div class="event-detail-row"><strong>Spot</strong><span>Royal Darbar Courtyard</span></div>
+            </div>
+            <div class="event-footer">
+              <span class="dress-pill">👑 Regal Pastels / Desi Chic</span>
+              <button class="ics-btn" data-ics="2">+ Calendar (.ics)</button>
+            </div>
+          </article>
+
+          <!-- Event 4 -->
+          <article class="event-card" data-day="day2">
+            <div>
+              <div class="event-top">
+                <div>
+                  <div class="event-num">Event 04 • Day 2</div>
+                  <h3 class="event-name">Midnight Afterparty</h3>
+                </div>
+                <div class="event-emoji">🥂</div>
+              </div>
+              <p class="event-tagline">Strictly off-the-record. Neon lights, midnight sliders, and DJ till sunrise.</p>
+            </div>
+            <div class="event-details">
+              <div class="event-detail-row"><strong>Date</strong><span>Sunday, 20 Dec 2026</span></div>
+              <div class="event-detail-row"><strong>Time</strong><span>11:30 PM – Late</span></div>
+              <div class="event-detail-row"><strong>Spot</strong><span>Velvet Lounge Rooftop</span></div>
+            </div>
+            <div class="event-footer">
+              <span class="dress-pill">🖤 All Black &amp; Sparkle</span>
+              <button class="ics-btn" data-ics="3">+ Calendar (.ics)</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: FIT CHECK PALETTE & VENUE HUB -->
+    <section id="slide-4" class="slide" data-title="FIT CHECK">
+      <div class="slide-inner">
+        <span class="eyebrow">04 • Aesthetic &amp; Location</span>
+        <h2 class="section-title">Fit Check &amp; <em>Venue Hub</em></h2>
+        <p class="section-lead">Tap any color swatch to copy its code for your stylist, and grab quick directions to the venue.</p>
+
+        <div class="fit-venue-grid">
+          <!-- Fit Check Palette -->
+          <div class="panel-card">
+            <h3>The Fit Check Palette</h3>
+            <p class="sub">Curated Desi-Chic shades so every group photo looks straight out of a magazine.</p>
+
+            <div class="swatches-grid">
+              <button class="swatch active" data-hex="#E89D1C" data-tip="Marigold Glow (#E89D1C): Perfect for Day 1 Haldi kurtas, breezy lehengas &amp; floral dupattas.">
+                <div class="swatch-color" style="background:#E89D1C;"></div>
+                <span class="swatch-name">Marigold</span>
+                <span class="swatch-hex">#E89D1C</span>
+              </button>
+              <button class="swatch" data-hex="#F5EFE4" data-tip="Ivory Silk (#F5EFE4): Timeless chic for Haldi brunch or minimalist sherwanis &amp; sarees.">
+                <div class="swatch-color" style="background:#F5EFE4;"></div>
+                <span class="swatch-name">Ivory Silk</span>
+                <span class="swatch-hex">#F5EFE4</span>
+              </button>
+              <button class="swatch" data-hex="#C84B31" data-tip="Terracotta (#C84B31): Warm earthy pop for wedding evening looks and bold accessories.">
+                <div class="swatch-color" style="background:#C84B31;"></div>
+                <span class="swatch-name">Terracotta</span>
+                <span class="swatch-hex">#C84B31</span>
+              </button>
+              <button class="swatch" data-hex="#1F5E4B" data-tip="Emerald Vibe (#1F5E4B): Royal jewel tone for Sangeet cocktail nights &amp; bandhgalas.">
+                <div class="swatch-color" style="background:#1F5E4B;"></div>
+                <span class="swatch-name">Emerald</span>
+                <span class="swatch-hex">#1F5E4B</span>
+              </button>
+              <button class="swatch" data-hex="#E7C27D" data-tip="Champagne (#E7C27D): Shimmer &amp; metallic magic for Sangeet dance floor spotlights.">
+                <div class="swatch-color" style="background:#E7C27D;"></div>
+                <span class="swatch-name">Champagne</span>
+                <span class="swatch-hex">#E7C27D</span>
+              </button>
+              <button class="swatch" data-hex="#14131B" data-tip="Midnight (#14131B): Sleek monochrome black &amp; sparkle for the rooftop Afterparty.">
+                <div class="swatch-color" style="background:#14131B;"></div>
+                <span class="swatch-name">Midnight</span>
+                <span class="swatch-hex">#14131B</span>
+              </button>
+            </div>
+
+            <div class="fit-tip-box" id="fit-tip-box">
+              <strong>Style Note:</strong> Marigold Glow (#E89D1C): Perfect for Day 1 Haldi kurtas, breezy lehengas &amp; floral dupattas.
+            </div>
+          </div>
+
+          <!-- Venue Hub -->
+          <div class="panel-card">
+            <h3>Venue Hub</h3>
+            <p class="sub">All four functions happen inside one gorgeous heritage property — zero traffic stress.</p>
+
+            <div class="venue-address-box">
+              <div class="venue-name">Suryagarh Heritage Villa</div>
+              <div class="venue-addr" id="venue-address-text">
+                Plot 14, Amer Heritage Road, Kukas, Jaipur, Rajasthan 302028, India
+              </div>
+              <div class="venue-actions">
+                <button class="btn-primary" id="copy-address-btn" style="padding:11px 18px; font-size:0.86rem;">📋 Copy Address</button>
+                <a class="btn-secondary" href="https://www.google.com/maps/search/?api=1&query=Amer+Road+Kukas+Jaipur+Rajasthan+302028" target="_blank" rel="noopener" style="padding:10px 18px; font-size:0.86rem;">📍 Open in Maps</a>
+              </div>
+            </div>
+
+            <div class="logistics-list">
+              <div class="log-item">
+                <strong>✈️ Nearest Airport</strong>
+                Jaipur Int'l Airport (JAI) — 35 mins drive
+              </div>
+              <div class="log-item">
+                <strong>🚆 Railway Station</strong>
+                Jaipur Junction (JP) — 25 mins drive
+              </div>
+              <div class="log-item">
+                <strong>🏨 Check-In</strong>
+                Dec 19 from 09:30 AM (Early hospitality desk)
+              </div>
+              <div class="log-item">
+                <strong>🚐 VIP Shuttle</strong>
+                Complimentary pickups every 45 mins
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: RSVP & PERSONALIZED VIP BOARDING PASS -->
+    <section id="slide-5" class="slide" data-title="VIP RSVP">
+      <div class="slide-inner">
+        <span class="eyebrow">05 • Lock Your Spot</span>
+        <h2 class="section-title">RSVP &amp; Get Your <em>VIP Pass</em></h2>
+        <p class="section-lead">Fill this in 15 seconds — we'll instantly generate your personalized wedding boarding pass ready to save &amp; flex.</p>
+
+        <div class="rsvp-grid">
+          <!-- RSVP Form -->
+          <form class="form-card" id="rsvp-form">
+            <div class="form-row">
+              <label class="field-label" for="guest-name">Your Full Name</label>
+              <input type="text" id="guest-name" placeholder="e.g. Rohan Sharma" required />
+            </div>
+
+            <div class="form-row-2">
+              <div>
+                <label class="field-label" for="guest-status">Attendance</label>
+                <select id="guest-status">
+                  <option value="CONFIRMED • VIP">Locked In! Wouldn't miss it</option>
+                  <option value="SENDING LOVE">Can't make it, sending blessings</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label" for="guest-count">Guests Count</label>
+                <select id="guest-count">
+                  <option value="01 Guest">Just Me (1)</option>
+                  <option value="02 Guests">Me +1 (2)</option>
+                  <option value="03 Guests">Squad of 3</option>
+                  <option value="04 Guests">Squad of 4</option>
+                  <option value="05 Guests">Full Gang (5)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div>
+                <label class="field-label" for="guest-squad">Which Squad?</label>
+                <select id="guest-squad">
+                  <option value="TEAM ARVIND">Team Arvind 🔥</option>
+                  <option value="TEAM NIKHIL">Team Nikhil ⚡</option>
+                  <option value="BOTH SIDES">Both Sides / VIP</option>
+                  <option value="HERE FOR FOOD">Strictly Here for the Food 🍽️</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label" for="guest-song">DJ Song Request</label>
+                <input type="text" id="guest-song" placeholder="e.g. Kala Chashma / Kesariya" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label class="field-label">Events You're Attending</label>
+              <div class="check-pills">
+                <label class="check-pill"><input type="checkbox" value="Haldi" checked> Haldi</label>
+                <label class="check-pill"><input type="checkbox" value="Sangeet" checked> Sangeet</label>
+                <label class="check-pill"><input type="checkbox" value="Wedding" checked> Wedding</label>
+                <label class="check-pill"><input type="checkbox" value="Afterparty" checked> Afterparty</label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width:100%; margin-top:8px;">
+              Generate My VIP Boarding Pass ✨
+            </button>
+          </form>
+
+          <!-- Live VIP Boarding Pass -->
+          <div class="vip-pass-wrap">
+            <div class="vip-pass" id="vip-pass-card">
+              <div class="pass-top">
+                <span class="pass-tag">VIP WEDDING PASS</span>
+                <span class="pass-code" id="pass-id">AN-2026-884</span>
+              </div>
+
+              <div class="pass-route">
+                <div class="pass-city">
+                  HOME
+                  <small>Your City</small>
+                </div>
+                <div class="pass-arrow"><span>✈</span></div>
+                <div class="pass-city" style="text-align:right;">
+                  JAI
+                  <small>Jaipur • Dec 20</small>
+                </div>
+              </div>
+
+              <hr class="pass-divider">
+
+              <div class="pass-meta-grid">
+                <div class="pass-field">
+                  <span>VIP Guest</span>
+                  <strong id="pass-guest-name">Your Name Here</strong>
+                </div>
+                <div class="pass-field">
+                  <span>Squad / Gate</span>
+                  <strong id="pass-squad">TEAM ARVIND</strong>
+                </div>
+                <div class="pass-field">
+                  <span>Party Size</span>
+                  <strong id="pass-count">01 Guest</strong>
+                </div>
+                <div class="pass-field">
+                  <span>Events Access</span>
+                  <strong id="pass-events">All 4 Functions</strong>
+                </div>
+              </div>
+
+              <div class="pass-field" style="margin-bottom:14px;">
+                <span>DJ Track Request</span>
+                <strong id="pass-song">Surprise Me 🎶</strong>
+              </div>
+
+              <div class="barcode-strip">
+                <div class="barcode-bars" aria-hidden="true"></div>
+                <span class="pass-status-pill" id="pass-status">READY TO RSVP</span>
+              </div>
+            </div>
+
+            <div class="pass-actions">
+              <button class="btn-secondary" id="download-pass-btn" style="flex:1;">⬇️ Save Pass (PNG)</button>
+              <button class="btn-secondary" id="whatsapp-share-btn" style="flex:1;">💬 Share on WhatsApp</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Made with ❤️ for <strong>Arvind &amp; Nikhil</strong> • #TheHardLaunch2026 • Dec 19–20, 2026
+  </footer>
+
+  <!-- =========================================================
+       INTERACTIVE JAVASCRIPT (100% SELF-CONTAINED)
+  ========================================================= -->
+  <script>
+    (function () {
+      /* -------------------------------------------------------
+         1. CONFETTI ENGINE (LIGHTWEIGHT CANVAS)
+      ------------------------------------------------------- */
+      const confettiCanvas = document.getElementById('confetti-canvas');
+      const ctx = confettiCanvas.getContext('2d');
+      let confettiPieces = [];
+      let confettiRunning = false;
+
+      function resizeConfetti() {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeConfetti);
+      resizeConfetti();
+
+      function burstConfetti(count = 95) {
+        const colors = ['#C84B31', '#E89D1C', '#F4C97A', '#FF6B7B', '#1F5E4B', '#FFFFFF'];
+        for (let i = 0; i < count; i++) {
+          confettiPieces.push({
+            x: window.innerWidth * (0.2 + Math.random() * 0.6),
+            y: window.innerHeight * 0.45,
+            vx: (Math.random() - 0.5) * 14,
+            vy: Math.random() * -13 - 4,
+            size: Math.random() * 7 + 5,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rot: Math.random() * 360,
+            vrot: (Math.random() - 0.5) * 12,
+            life: 1
+          });
+        }
+        if (!confettiRunning) {
+          confettiRunning = true;
+          requestAnimationFrame(animateConfetti);
+        }
+      }
+
+      function animateConfetti() {
+        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        confettiPieces.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.28;
+          p.rot += p.vrot;
+          p.life -= 0.0085;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.life);
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+          ctx.restore();
+        });
+        confettiPieces = confettiPieces.filter(p => p.life > 0 && p.y < confettiCanvas.height + 30);
+        if (confettiPieces.length > 0) {
+          requestAnimationFrame(animateConfetti);
+        } else {
+          confettiRunning = false;
+        }
+      }
+
+      /* -------------------------------------------------------
+         2. TOAST HELPER
+      ------------------------------------------------------- */
+      const toastEl = document.getElementById('toast');
+      let toastTimer;
+      function showToast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+      }
+
+      /* -------------------------------------------------------
+         3. ENTRY CURTAIN UNLOCK
+      ------------------------------------------------------- */
+      const curtain = document.getElementById('entry-curtain');
+      const openBtn = document.getElementById('open-invite-btn');
+
+      openBtn.addEventListener('click', () => {
+        curtain.classList.add('opened');
+        document.body.classList.remove('locked');
+        burstConfetti(120);
+        showToast('Welcome to Arvind & Nikhil’s Hard Launch! ✨');
+      });
+
+      /* -------------------------------------------------------
+         4. THEME TOGGLE (IVORY EDITORIAL <-> MIDNIGHT AFTERPARTY)
+      ------------------------------------------------------- */
+      const themeBtn = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      const themeLabel = document.getElementById('theme-label');
+      const htmlEl = document.documentElement;
+
+      function applyTheme(mode) {
+        htmlEl.setAttribute('data-theme', mode);
+        if (mode === 'dark') {
+          themeIcon.textContent = '☀️';
+          themeLabel.textContent = 'Ivory';
+        } else {
+          themeIcon.textContent = '🌙';
+          themeLabel.textContent = 'Midnight';
+        }
+      }
+
+      themeBtn.addEventListener('click', () => {
+        const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        showToast(next === 'dark' ? 'Switched to Midnight Afterparty 🌙' : 'Switched to Ivory Editorial ☀️');
+      });
+
+      /* -------------------------------------------------------
+         5. AMBIENT CHILL MUSIC (WEB AUDIO API — 100% OFFLINE)
+      ------------------------------------------------------- */
+      const musicBtn = document.getElementById('music-toggle');
+      const musicIcon = document.getElementById('music-icon');
+      const musicLabel = document.getElementById('music-label');
+      let audioCtx = null;
+      let musicPlaying = false;
+      let chordInterval = null;
+      let masterGain = null;
+
+      const chords = [
+        [261.63, 329.63, 392.00, 493.88], // Cmaj7
+        [220.00, 261.63, 329.63, 392.00], // Am7
+        [174.61, 220.00, 261.63, 329.63], // Fmaj7
+        [196.00, 246.94, 293.66, 392.00]  // G6
+      ];
+      let chordIdx = 0;
+
+      function playAmbientChord() {
+        if (!audioCtx || !musicPlaying) return;
+        const now = audioCtx.currentTime;
+        const notes = chords[chordIdx % chords.length];
+        chordIdx++;
+
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = idx === 0 ? 'sine' : 'triangle';
+          osc.frequency.setValueAtTime(freq, now);
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.linearRampToValueAtTime(0.045, now + 0.9);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.6);
+
+          osc.connect(gain);
+          gain.connect(masterGain);
+          osc.start(now + idx * 0.08);
+          osc.stop(now + 3.8);
+        });
+      }
+
+      musicBtn.addEventListener('click', () => {
+        if (!musicPlaying) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!audioCtx) {
+            audioCtx = new AudioContextClass();
+            masterGain = audioCtx.createGain();
+            masterGain.gain.value = 0.65;
+            masterGain.connect(audioCtx.destination);
+          }
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          musicPlaying = true;
+          playAmbientChord();
+          chordInterval = setInterval(playAmbientChord, 3400);
+          musicBtn.classList.add('active-audio');
+          musicIcon.textContent = '🔊';
+          musicLabel.textContent = 'Vibe On';
+          showToast('Chill ambient vibe playing 🎶');
+        } else {
+          musicPlaying = false;
+          clearInterval(chordInterval);
+          musicBtn.classList.remove('active-audio');
+          musicIcon.textContent = '🎵';
+          musicLabel.textContent = 'Vibe Off';
+          showToast('Ambient music paused');
+        }
+      });
+
+      /* -------------------------------------------------------
+         6. LIVE COUNTDOWN TO DEC 20, 2026 18:30 IST
+      ------------------------------------------------------- */
+      const targetTime = new Date('2026-12-20T18:30:00+05:30').getTime();
+      const cdDays = document.getElementById('cd-days');
+      const cdHours = document.getElementById('cd-hours');
+      const cdMins = document.getElementById('cd-mins');
+      const cdSecs = document.getElementById('cd-secs');
+
+      function updateCountdown() {
+        const diff = Math.max(0, targetTime - Date.now());
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        cdDays.textContent = String(d).padStart(2, '0');
+        cdHours.textContent = String(h).padStart(2, '0');
+        cdMins.textContent = String(m).padStart(2, '0');
+        cdSecs.textContent = String(s).padStart(2, '0');
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      /* -------------------------------------------------------
+         7. SLIDE NAVIGATION (SCROLL SPY + ARROWS + KEYBOARD)
+      ------------------------------------------------------- */
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+      const dots = Array.from(document.querySelectorAll('.slide-dot'));
+      const counterEl = document.getElementById('slide-counter');
+      let currentSlide = 0;
+
+      function setActiveSlide(index) {
+        currentSlide = Math.max(0, Math.min(slides.length - 1, index));
+        navLinks.forEach((a, i) => a.classList.toggle('active', i === currentSlide));
+        dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+        const title = slides[currentSlide].getAttribute('data-title') || '';
+        counterEl.textContent = `0${currentSlide + 1} / 0${slides.length} • ${title}`;
+      }
+
+      function goToSlide(index) {
+        const clamped = Math.max(0, Math.min(slides.length - 1, index));
+        slides[clamped].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setActiveSlide(clamped);
+      }
+
+      document.getElementById('prev-slide').addEventListener('click', () => goToSlide(currentSlide - 1));
+      document.getElementById('next-slide').addEventListener('click', () => goToSlide(currentSlide + 1));
+
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => goToSlide(Number(dot.dataset.slide)));
+      });
+
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const idx = slides.indexOf(entry.target);
+              if (idx !== -1) setActiveSlide(idx);
+            }
+          });
+        },
+        { threshold: 0.45 }
+      );
+      slides.forEach(s => observer.observe(s));
+
+      window.addEventListener('keydown', e => {
+        if (document.body.classList.contains('locked')) return;
+        if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+          e.preventDefault();
+          goToSlide(currentSlide + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          goToSlide(currentSlide - 1);
+        }
+      });
+
+      /* -------------------------------------------------------
+         8. LIVE FLOATING EMOJI HYPE WIDGET
+      ------------------------------------------------------- */
+      const hypeCountEl = document.getElementById('hype-count');
+      const hypeMsgEl = document.getElementById('hype-msg');
+      let hypeCount = Number(localStorage.getItem('an_hype_count')) || 1248;
+      hypeCountEl.textContent = hypeCount.toLocaleString();
+
+      document.querySelectorAll('.emoji-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          hypeCount++;
+          localStorage.setItem('an_hype_count', hypeCount);
+          hypeCountEl.textContent = hypeCount.toLocaleString();
+          hypeMsgEl.textContent = btn.dataset.msg;
+
+          const rect = btn.getBoundingClientRect();
+          for (let i = 0; i < 3; i++) {
+            const floater = document.createElement('div');
+            floater.className = 'floating-emoji';
+            floater.textContent = btn.dataset.emoji;
+            floater.style.left = (rect.left + rect.width / 2 + (Math.random() - 0.5) * 60) + 'px';
+            floater.style.top = (rect.top + window.scrollY - window.scrollY) + 'px';
+            document.body.appendChild(floater);
+            setTimeout(() => floater.remove(), 1800);
+          }
+        });
+      });
+
+      /* -------------------------------------------------------
+         9. FUNCTIONS DECK FILTER + REAL .ICS CALENDAR GENERATOR
+      ------------------------------------------------------- */
+      const eventCards = Array.from(document.querySelectorAll('.event-card'));
+      document.querySelectorAll('.event-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.event-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const filter = tab.dataset.filter;
+          eventCards.forEach(card => {
+            const show = filter === 'all' || card.dataset.day === filter;
+            card.style.display = show ? 'flex' : 'none';
+          });
+        });
+      });
+
+      const eventsData = [
+        {
+          title: 'Arvind & Nikhil — Haldi & Sun Brunch',
+          start: '20261219T053000Z',
+          end: '20261219T090000Z',
+          location: 'Courtyard Lawn, Suryagarh Heritage Villa, Jaipur',
+          desc: 'Dress Code: Sunshine Yellow & Ivory. Marigold showers & iced thandai!'
+        },
+        {
+          title: 'Arvind & Nikhil — Sangeet & Cocktail',
+          start: '20261219T140000Z',
+          end: '20261219T180000Z',
+          location: 'The Glasshouse Ballroom, Suryagarh Heritage Villa, Jaipur',
+          desc: 'Dress Code: Indo-Western Glam. No-skip playlist & dance battles!'
+        },
+        {
+          title: 'Arvind & Nikhil — The Wedding (The Hard Launch)',
+          start: '20261220T130000Z',
+          end: '20261220T173000Z',
+          location: 'Royal Darbar Courtyard, Suryagarh Heritage Villa, Jaipur',
+          desc: 'Dress Code: Regal Pastels / Desi Chic. Baraat, Pheras & Royal Feast.'
+        },
+        {
+          title: 'Arvind & Nikhil — Midnight Afterparty',
+          start: '20261220T180000Z',
+          end: '20261220T223000Z',
+          location: 'Velvet Lounge Rooftop, Suryagarh Heritage Villa, Jaipur',
+          desc: 'Dress Code: All Black & Sparkle. Strictly off-the-record!'
+        }
+      ];
+
+      function buildIcsString(items) {
+        const lines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//ArvindNikhilWedding//TheHardLaunch//EN',
+          'CALSCALE:GREGORIAN'
+        ];
+        items.forEach((ev, idx) => {
+          lines.push(
+            'BEGIN:VEVENT',
+            `UID:arvind-nikhil-2026-${idx}@thehardlaunch`,
+            `DTSTAMP:20261123T080000Z`,
+            `DTSTART:${ev.start}`,
+            `DTEND:${ev.end}`,
+            `SUMMARY:${ev.title}`,
+            `LOCATION:${ev.location}`,
+            `DESCRIPTION:${ev.desc}`,
+            'END:VEVENT'
+          );
+        });
+        lines.push('END:VCALENDAR');
+        return lines.join('\r\n');
+      }
+
+      function downloadFile(filename, content, mime) {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      document.querySelectorAll('.ics-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const ev = eventsData[Number(btn.dataset.ics)];
+          downloadFile(`${ev.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.ics`, buildIcsString([ev]), 'text/calendar');
+          showToast(`Saved "${ev.title.split('— ')[1]}" to Calendar! 📅`);
+        });
+      });
+
+      document.getElementById('download-all-ics').addEventListener('click', () => {
+        downloadFile('arvind-nikhil-all-wedding-events.ics', buildIcsString(eventsData), 'text/calendar');
+        showToast('All 4 wedding events downloaded (.ics)! 📅');
+      });
+
+      /* -------------------------------------------------------
+         10. FIT CHECK PALETTE & COPY ADDRESS
+      ------------------------------------------------------- */
+      const fitTipBox = document.getElementById('fit-tip-box');
+      document.querySelectorAll('.swatch').forEach(sw => {
+        sw.addEventListener('click', () => {
+          document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+          sw.classList.add('active');
+          fitTipBox.innerHTML = `<strong>Style Note:</strong> ${sw.dataset.tip}`;
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(sw.dataset.hex).catch(() => {});
+          }
+          showToast(`Copied swatch ${sw.dataset.hex} 🎨`);
+        });
+      });
+
+      document.getElementById('copy-address-btn').addEventListener('click', () => {
+        const addr = document.getElementById('venue-address-text').textContent.trim();
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(addr).then(() => showToast('Venue address copied! 📍'));
+        } else {
+          showToast('Venue: Suryagarh Heritage Villa, Jaipur');
+        }
+      });
+
+      /* -------------------------------------------------------
+         11. RSVP FORM -> VIP BOARDING PASS + PNG DOWNLOAD
+      ------------------------------------------------------- */
+      const rsvpForm = document.getElementById('rsvp-form');
+      const passName = document.getElementById('pass-guest-name');
+      const passSquad = document.getElementById('pass-squad');
+      const passCount = document.getElementById('pass-count');
+      const passEvents = document.getElementById('pass-events');
+      const passSong = document.getElementById('pass-song');
+      const passStatus = document.getElementById('pass-status');
+      const passId = document.getElementById('pass-id');
+
+      rsvpForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const nameVal = document.getElementById('guest-name').value.trim() || 'VIP Guest';
+        const statusVal = document.getElementById('guest-status').value;
+        const countVal = document.getElementById('guest-count').value;
+        const squadVal = document.getElementById('guest-squad').value;
+        const songVal = document.getElementById('guest-song').value.trim() || 'DJ Choice 🎶';
+        const checked = Array.from(rsvpForm.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
+
+        passName.textContent = nameVal;
+        passSquad.textContent = squadVal;
+        passCount.textContent = countVal;
+        passEvents.textContent = checked.length === 4 ? 'All 4 Functions' : (checked.join(', ') || 'Wedding');
+        passSong.textContent = songVal;
+        passStatus.textContent = statusVal;
+        passId.textContent = `AN-2026-${Math.floor(100 + Math.random() * 900)}`;
+
+        burstConfetti(110);
+        showToast(`VIP Pass unlocked for ${nameVal}! 🎟️`);
+      });
+
+      /* Draw crisp downloadable PNG of the VIP Pass via Canvas */
+      document.getElementById('download-pass-btn').addEventListener('click', () => {
+        const c = document.createElement('canvas');
+        c.width = 900;
+        c.height = 520;
+        const g = c.getContext('2d');
+
+        // Background card
+        const grad = g.createLinearGradient(0, 0, 900, 520);
+        grad.addColorStop(0, '#1B1613');
+        grad.addColorStop(1, '#2D1C19');
+        g.fillStyle = grad;
+        g.fillRect(0, 0, 900, 520);
+
+        // Gold border
+        g.strokeStyle = '#F4C97A';
+        g.lineWidth = 4;
+        g.strokeRect(20, 20, 860, 480);
+
+        // Header
+        g.fillStyle = '#F4C97A';
+        g.font = 'bold 20px monospace';
+        g.fillText('VIP WEDDING BOARDING PASS • THE HARD LAUNCH', 52, 74);
+        g.fillStyle = '#FBF7F0';
+        g.font = '20px monospace';
+        g.fillText(passId.textContent, 710, 74);
+
+        // Couple Title
+        g.font = 'italic 54px Georgia, serif';
+        g.fillStyle = '#FFFFFF';
+        g.fillText('Arvind & Nikhil', 52, 148);
+        g.font = '22px sans-serif';
+        g.fillStyle = '#E8C684';
+        g.fillText('DEC 19–20, 2026  •  SURYAGARH HERITAGE VILLA, JAIPUR', 52, 186);
+
+        // Dashed divider
+        g.setLineDash([8, 8]);
+        g.strokeStyle = 'rgba(244,201,122,0.45)';
+        g.lineWidth = 2;
+        g.beginPath();
+        g.moveTo(52, 218);
+        g.lineTo(848, 218);
+        g.stroke();
+        g.setLineDash([]);
+
+        // Guest Fields
+        const fields = [
+          ['VIP GUEST', passName.textContent, 52, 272],
+          ['SQUAD / GATE', passSquad.textContent, 470, 272],
+          ['PARTY SIZE', passCount.textContent, 52, 352],
+          ['EVENTS ACCESS', passEvents.textContent, 470, 352],
+          ['DJ TRACK REQUEST', passSong.textContent, 52, 432],
+          ['STATUS', passStatus.textContent, 470, 432]
+        ];
+        fields.forEach(([lbl, val, x, y]) => {
+          g.fillStyle = 'rgba(251,247,240,0.6)';
+          g.font = 'bold 14px monospace';
+          g.fillText(lbl, x, y);
+          g.fillStyle = '#FFFFFF';
+          g.font = 'bold 24px sans-serif';
+          g.fillText(val.slice(0, 28), x, y + 32);
+        });
+
+        const link = document.createElement('a');
+        link.download = `VIP-Pass-${passName.textContent.replace(/[^a-z0-9]+/gi, '-')}.png`;
+        link.href = c.toDataURL('image/png');
+        link.click();
+        showToast('VIP Boarding Pass saved as PNG! 📸');
+      });
+
+      document.getElementById('whatsapp-share-btn').addEventListener('click', () => {
+        const msg = encodeURIComponent(
+          `🎟️ Just unlocked my VIP Wedding Pass for Arvind & Nikhil's Hard Launch!\n` +
+          `👤 Guest: ${passName.textContent} (${passCount.textContent})\n` +
+          `🔥 Squad: ${passSquad.textContent}\n` +
+          `📅 Dec 19–20, 2026 • Jaipur\n` +
+          `See you on the dance floor! 🥂✨`
+        );
+        window.open(`https://wa.me/?text=${msg}`, '_blank');
+      });
+    })();
+  </script>
+</body>
+</html>
